@@ -1,14 +1,18 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import useStore from "../store/useStore";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 function Subida() {
-    const { fetchPreciosEspeciales } = useStore();
-    const [usuarioId, setUsuarioId] = useState(""); // Se ingresa manualmente
+    const { fetchPreciosEspeciales, productos, fetchProductos } = useStore();
+    const [usuarioId, setUsuarioId] = useState("");
     const [productoId, setProductoId] = useState("");
     const [precioEspecial, setPrecioEspecial] = useState("");
+
+    useEffect(() => {
+        fetchProductos().then(r => r); // Cargar los productos al montar el componente
+    }, []);
 
     const guardarPrecioEspecial = () => {
         if (!usuarioId || !productoId || !precioEspecial) return alert("Todos los campos son obligatorios");
@@ -37,13 +41,18 @@ function Subida() {
                     onChange={(e) => setUsuarioId(e.target.value)}
                 />
 
-                <input
-                    type="text"
-                    placeholder="Ingrese ID de producto"
+                <select
                     className="border p-2 rounded w-full"
                     value={productoId}
                     onChange={(e) => setProductoId(e.target.value)}
-                />
+                >
+                    <option value="">Selecciona un producto</option>
+                    {productos.map((prod) => (
+                        <option key={prod._id} value={prod._id}>
+                            {prod.name} - {prod.brand} (${prod.price})
+                        </option>
+                    ))}
+                </select>
 
                 <input
                     type="number"
