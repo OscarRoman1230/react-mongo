@@ -11,6 +11,6 @@ const specialPriceSchema = new mongoose.Schema({
     ],
 });
 
-const SpecialPrice = mongoose.model("SpecialPrice", specialPriceSchema, "preciosEspeciales");
+const SpecialPrice = mongoose.model("SpecialPrice", specialPriceSchema, "preciosEspecialesRoman05");
 
 module.exports = SpecialPrice;
